@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <fstream>
 using namespace std;
 
 int board[4][4] ;
@@ -73,28 +74,50 @@ void UpProcess(int j) {
 
     if (CheckUpColumn(j) == 0)
         PushAllElementOnTop(3, j);
-
+    for (int i = 0; i < 4; i++) {
+        if (board[i][j] == board[i + 1][j]) {
+            board[i][j] += board[i + 1][j];
+            board[i + 1][j] = 0;
+            boardcheck[i + 1][j] = 0;
+            i++;
+        }
+    }
+    if (CheckUpColumn(j) == 0)
+        PushAllElementOnTop(3, j);
     return UpProcess(j + 1);
 }
 void show(){
+    ofstream f;
+    f.open("2048.out");
+
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 4; j++)
-            cout << board[i][j] << " ";
-        cout << endl;
+            f << board[i][j] << " ";
+        f << endl;
     }
+    f.close();
+}
+void input(){
+    ifstream f;
+    f.open("2048.inp");
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j ++) {
+            int x;
+            f >> x;
+            board[i][j] = x;
+        }
+    f.close();
 }
 int main(){
+    input();
     srand(time(NULL));
 
-    Random2num(1);
-    cout << "The Matrix at first randomly: " << endl;
-    show();
+    //Random2num(1);
+
     CheckAppearNumber();
     UpProcess(0);
-    cout << "The Matrix after go up: " << endl;
-    show();
-    Random2num(1);
-    cout << "The Matrix at second randomly: " << endl;
+
+    //Random2num(1);
     show();
 
     return 0;
