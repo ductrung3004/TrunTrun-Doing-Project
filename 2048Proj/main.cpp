@@ -1,11 +1,19 @@
 #include <iostream>
 #include <time.h>
 #include <fstream>
+#include <conio.h>
+#include <stdio.h>
 using namespace std;
 
 int board[4][4] ;
 bool boardcheck[4][4];
 
+bool GameOver(){
+    for (int i = 0; i < 4; ++i)
+        for (int j = 0; j < 4; ++j)
+            if (boardcheck[i][j] == 0) return false;
+    return true;
+}
 void createnumrandomly(int i, int j){
     board[i][j] = rand() % 4 == 3 ? 4 : 2;
     return;
@@ -17,7 +25,9 @@ void Random2num(int count){
 
     if (board[i][j] == 0)
         createnumrandomly(i, j);
-    else return Random2num(count);
+    else
+        if (!GameOver())
+            return Random2num(count);
     if (count < 2)
         return Random2num(count + 1);
     return;
@@ -26,7 +36,7 @@ void Random2num(int count){
 void CheckAppearNumber(){
     for(int i = 0; i < 4; i++)
         for(int j = 0; j < 4; j++)
-            if (board[i][j] != 0) boardcheck[i][j] = true;
+            if (board[i][j] != 0) boardcheck[i][j] = 1;
 }
 
 
@@ -75,6 +85,7 @@ void UpProcess(int j) {
     if (CheckUpColumn(j) == 0)
         PushAllElementOnTop(3, j);
     for (int i = 0; i < 4; i++) {
+        if (board[i][j] == 0) ++i;
         if (board[i][j] == board[i + 1][j]) {
             board[i][j] += board[i + 1][j];
             board[i + 1][j] = 0;
@@ -87,15 +98,15 @@ void UpProcess(int j) {
     return UpProcess(j + 1);
 }
 void show(){
-    ofstream f;
-    f.open("2048.out");
-
+    //ofstream f;
+    //f.open("2048.out");
+    system("cls");
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 4; j++)
-            f << board[i][j] << " ";
-        f << endl;
+            cout << board[i][j] << " ";
+        cout << endl;
     }
-    f.close();
+    //f.close();
 }
 void input(){
     ifstream f;
@@ -108,17 +119,29 @@ void input(){
         }
     f.close();
 }
+
 int main(){
-    input();
+    char a;
     srand(time(NULL));
-
-    //Random2num(1);
-
-    CheckAppearNumber();
-    UpProcess(0);
-
-    //Random2num(1);
+    Random2num(1);
     show();
+    while (1){
+        a = getch();
+        if (a == 8) {
+            cout << "Reset Game";
+            break;
+        }
+        if (a == 'w') {
+            CheckAppearNumber();
+            UpProcess(0);
+            Random2num(1);
+            show();
+        }
+        if (GameOver()) {
+            cout << "Game Over";
+            break;
+        }
+    }
 
     return 0;
 }
