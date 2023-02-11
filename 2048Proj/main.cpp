@@ -1,12 +1,26 @@
 #include <iostream>
-
+#include <time.h>
 using namespace std;
 
-int board[4][4] = {{0, 2, 0, 4},
-                   {2, 4, 0, 8},
-                   {2, 0, 2, 4},
-                   {2, 0, 4, 8}};
+int board[4][4] ;
 bool boardcheck[4][4];
+
+void createnumrandomly(int i, int j){
+    board[i][j] = rand() % 4 == 3 ? 4 : 2;
+    return;
+}
+void Random2num(int count){
+
+    int i = rand() % 4;
+    int j = rand() % 4;
+
+    if (board[i][j] == 0)
+        createnumrandomly(i, j);
+    else return Random2num(count);
+    if (count < 2)
+        return Random2num(count + 1);
+    return;
+}
 
 void CheckAppearNumber(){
     for(int i = 0; i < 4; i++)
@@ -70,11 +84,18 @@ void show(){
     }
 }
 int main(){
-    cout << "The Matrix at first: " << endl;
+    srand(time(NULL));
+
+    Random2num(1);
+    cout << "The Matrix at first randomly: " << endl;
     show();
     CheckAppearNumber();
     UpProcess(0);
     cout << "The Matrix after go up: " << endl;
     show();
+    Random2num(1);
+    cout << "The Matrix at second randomly: " << endl;
+    show();
+
     return 0;
 }
