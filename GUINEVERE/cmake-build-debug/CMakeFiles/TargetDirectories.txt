@@ -1,0 +1,3 @@
+D:/C++/GUINEVERE/cmake-build-debug/CMakeFiles/GUINEVERE.dir
+D:/C++/GUINEVERE/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/C++/GUINEVERE/cmake-build-debug/CMakeFiles/rebuild_cache.dir
